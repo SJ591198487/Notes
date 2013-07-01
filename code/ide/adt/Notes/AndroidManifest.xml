@@ -28,15 +28,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.plter.notes.AtyEditNote"
+            android:name="com.plter.notes.atys.AtyEditNote"
             android:configChanges="orientation|keyboardHidden" >
         </activity>
         <activity
-            android:name="com.plter.notes.AtyPhotoViewer"
+            android:name="com.plter.notes.atys.AtyPhotoViewer"
             android:configChanges="orientation|keyboardHidden" >
         </activity>
         <activity
-            android:name="com.plter.notes.AtyVideoViewer"
+            android:name="com.plter.notes.atys.AtyVideoViewerideoViewer"
             android:configChanges="orientation|keyboardHidden" >
         </activity>
     </application>

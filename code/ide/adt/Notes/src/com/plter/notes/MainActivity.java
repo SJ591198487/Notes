@@ -12,6 +12,7 @@ import android.view.View.OnClickListener;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
+import com.plter.notes.atys.AtyEditNote;
 import com.plter.notes.data.NotesDB;
 
 public class MainActivity extends ListActivity {

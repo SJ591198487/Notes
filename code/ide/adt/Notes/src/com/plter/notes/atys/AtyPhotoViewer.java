@@ -1,30 +1,32 @@
-package com.plter.notes;
+package com.plter.notes.atys;
+
+import java.io.File;
 
 import android.app.Activity;
+import android.net.Uri;
 import android.os.Bundle;
-import android.widget.MediaController;
-import android.widget.VideoView;
+import android.widget.ImageView;
 
-public class AtyVideoViewer extends Activity {
+public class AtyPhotoViewer extends Activity {
 
+	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		vv= new VideoView(this);
-		vv.setMediaController(new MediaController(this));
-		setContentView(vv);
+		
+		iv = new ImageView(this);
+		setContentView(iv);
 		
 		String path = getIntent().getStringExtra(EXTRA_PATH);
 		if (path!=null) {
-			vv.setVideoPath(path);
+			iv.setImageURI(Uri.fromFile(new File(path)));
 		}else{
 			finish();
 		}
 	}
 	
-	private VideoView vv;
+	private ImageView iv;
 	
 	public static final String EXTRA_PATH = "path";
-	
 }

@@ -1,32 +1,29 @@
-package com.plter.notes;
+package com.plter.notes.atys;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.app.ListActivity;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.plter.lib.android.java.controls.ArrayAdapter;
+import com.plter.notes.R;
 import com.plter.notes.data.Config;
 import com.plter.notes.data.NotesDB;
 
@@ -35,10 +32,10 @@ public class AtyEditNote extends ListActivity {
 	
 	private OnClickListener btnClickHandler=new OnClickListener() {
 		
-		Intent i;File f;
-		
 		@Override
 		public void onClick(View v) {
+			Intent i;File f;
+			
 			switch (v.getId()) {
 			case R.id.btnAddPhoto:
 				
@@ -80,9 +77,6 @@ public class AtyEditNote extends ListActivity {
 				setResult(RESULT_CANCELED);
 				finish();
 				break;
-
-			default:
-				break;
 			}
 		}
 	};
@@ -96,7 +90,19 @@ public class AtyEditNote extends ListActivity {
 		dbRead = db.getReadableDatabase();
 		dbWrite = db.getWritableDatabase();
 		
-		adapter = new MediaAdapter(this);
+		adapter = new ArrayAdapter<MediaListCellData>(this,R.layout.media_list_cell) {
+			
+			@Override
+			public void initListCell(int position, View listCell, ViewGroup parent) {
+				MediaListCellData data = getItem(position);
+				
+				ImageView ivIcon = (ImageView) listCell.findViewById(R.id.ivIcon);
+				TextView tvPath = (TextView) listCell.findViewById(R.id.tvPath);
+				
+				ivIcon.setImageResource(data.iconId);
+				tvPath.setText(data.path);
+			}
+		};
 		setListAdapter(adapter);
 		
 		etName = (EditText) findViewById(R.id.etName);
@@ -210,7 +216,7 @@ public class AtyEditNote extends ListActivity {
 	
 	private int noteId = -1;
 	private EditText etName,etContent;
-	private MediaAdapter adapter;
+	private ArrayAdapter<MediaListCellData> adapter;
 	private NotesDB db;
 	private SQLiteDatabase dbRead,dbWrite;
 	private String currentPath = null;
@@ -222,84 +228,4 @@ public class AtyEditNote extends ListActivity {
 	public static final String EXTRA_NOTE_ID = "noteId";
 	public static final String EXTRA_NOTE_NAME = "noteName";
 	public static final String EXTRA_NOTE_CONTENT = "noteContent";
-	
-	
-	static class MediaAdapter extends BaseAdapter{
-		
-		public MediaAdapter(Context context) {
-			this.context = context;
-		}
-		
-		public void add(MediaListCellData data){
-			list.add(data);
-		}
-		
-
-		@Override
-		public int getCount() {
-			return list.size();
-		}
-
-		@Override
-		public MediaListCellData getItem(int position) {
-			return list.get(position);
-		}
-
-		@Override
-		public long getItemId(int position) {
-			return position;
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			
-			if (convertView==null) {
-				convertView = LayoutInflater.from(context).inflate(R.layout.media_list_cell, null);
-			}
-			
-			MediaListCellData data = getItem(position);
-			
-			ImageView ivIcon = (ImageView) convertView.findViewById(R.id.ivIcon);
-			TextView tvPath = (TextView) convertView.findViewById(R.id.tvPath);
-			
-			ivIcon.setImageResource(data.iconId);
-			tvPath.setText(data.path);
-			return convertView;
-		}
-		
-		private Context context;
-		private List<MediaListCellData> list = new ArrayList<AtyEditNote.MediaListCellData>();
-	}
-	
-	static class MediaListCellData{
-		
-		public MediaListCellData(String path) {
-			this.path = path;
-			
-			if (path.endsWith(".jpg")) {
-				iconId = R.drawable.icon_photo;
-				type = MediaType.PHOTO;
-			}else if (path.endsWith(".mp4")) {
-				iconId = R.drawable.icon_video;
-				type = MediaType.VIDEO;
-			}
-		}
-		
-		public MediaListCellData(String path,int id) {
-			this(path);
-			
-			this.id = id;
-		}
-		
-		
-		int type = 0;
-		int id = -1;
-		String path = "";
-		int iconId = R.drawable.ic_launcher;
-	}
-	
-	static class MediaType{
-		static final int PHOTO = 1;
-		static final int VIDEO = 2;
-	}
 }
