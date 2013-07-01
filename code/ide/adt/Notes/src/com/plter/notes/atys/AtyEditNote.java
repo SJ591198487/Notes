@@ -136,13 +136,13 @@ public class AtyEditNote extends ListActivity {
 		
 		switch (data.type) {
 		case MediaType.PHOTO:
-			i = new Intent(this, AtyPhotoViewer.class);
-			i.putExtra(AtyPhotoViewer.EXTRA_PATH, data.path);
+			i = new Intent(Intent.ACTION_VIEW);
+			i.setDataAndType(Uri.fromFile(new File(data.path)), "image/jpeg");
 			startActivity(i);
 			break;
 		case MediaType.VIDEO:
-			i = new Intent(this, AtyVideoViewer.class);
-			i.putExtra(AtyVideoViewer.EXTRA_PATH, data.path);
+			i = new Intent(Intent.ACTION_VIEW);
+			i.setDataAndType(Uri.fromFile(new File(data.path)), "video/mp4");
 			startActivity(i);
 			break;
 		}
